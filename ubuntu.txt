@@ -1,0 +1,271 @@
+factorial---
+
+struct num{
+	int x;
+};
+
+program FACTORIAL{
+	version FACOVER{
+	   int fac(num)=1;
+	}=1;
+}=0x12345678;
+
+*->client
+
+#endif	/* DEBUG */
+
+	printf("Enter the number: ");
+	scanf("%d",&fac_1_arg.x);
+
+	result_1 = fac_1(&fac_1_arg, clnt);
+	if (result_1 == (int *) NULL) {
+		clnt_perror (clnt, "call failed");
+	}
+printf("Factorial Value: %d\n",*result_1);
+
+*->server
+
+
+    int facv=1;
+	for (int i = 1; i <=argp->x; ++i)
+	{
+		facv=facv*i;
+	}
+
+swap----
+
+struct num{
+	int a;
+	int b;
+};
+
+program swap{
+	version swapover{
+	   int swapnum(num)=1;
+	   int swapnum1(num)=2;
+	}=1;
+}=0x12345678;
+
+*-->client
+int num1,num2;
+
+	printf("Enter the first number: ");
+	scanf("%d",&swapnum_1_arg.a);
+
+	printf("Enter the second number: ");
+	scanf("%d",&swapnum1_1_arg.b);
+
+	num1=swapnum1_1_arg.a=swapnum_1_arg.a;
+	num2=swapnum1_1_arg.b=swapnum_1_arg.b;
+
+
+	clnt = clnt_create (host, swap, swapover, "udp");
+	if (clnt == NULL) {
+		clnt_pcreateerror (host);
+		exit (1);
+	}
+
+	printf("Before Swapping Numbers:\n");
+	printf("A = %d\n",num1);
+	printf("B = %d\n\n",num2);
+
+	printf("After Swapping Numbers:\n");
+	printf("A = %d \n",*result_1);
+	printf("B = %d",*result_2);
+
+*->server
+
+	int temp=argp->a;
+	argp->a=argp->b;
+	argp->b=argp->a;
+
+	result=argp->a;
+	---------
+	result=argp->b;
+
+---circle--------
+
+struct values{
+	float r;
+	float pi;
+	char op;
+};
+program CIRCLE {
+	version VERCIRCLE{
+	float AREA(values) = 1;
+	float DIAMETER(values) = 2;
+	float CIRCUMFERENCE(values) = 3;
+	
+	} = 4;
+
+
+} = 0x23456789;
+
+**cilent**
+
+if(op == 'A'){
+
+area_4_arg.r = n1;
+area_4_arg.pi = n2;
+
+
+	result_1 = area_4(&area_4_arg, clnt);
+	
+	return *result_1;
+
+
+
+}else if(op == 'D'){
+  
+diameter_4_arg.r = n1;
+diameter_4_arg.pi = n2;
+
+	result_2 = diameter_4(&diameter_4_arg, clnt);
+
+	return *result_2;	
+
+
+
+}else if(op == 'C'){
+
+	circumference_4_arg.r = n1;
+	circumference_4_arg.pi = n2;
+
+	result_3 = circumference_4(&circumference_4_arg, clnt);
+	
+	return *result_3;
+}
+
+--
+int
+main (int argc, char *argv[])
+{
+	char *host,op;
+	float n1,n2,result;
+
+	printf("enter radias: ");
+	scanf("%f",&n1);
+	printf("enter pi value:");
+	scanf("%f",&n2);
+	printf("enter oparetor A , D , C :");
+	scanf("%s",&op);
+
+	
+	host = argv[1];
+	result = circle_4 (host,n1,n2,op);
+
+printf("value is: %.2f",result);
+
+exit (0);
+}
+
+**server**
+
+static float  result;
+
+	result = argp->pi * argp->r * argp->r;
+	
+	return &result;
+---
+	static float  result;
+
+	result = 2 * argp->r;
+
+	return &result;
+---
+
+	static float  result;
+
+	result = 2 * argp->pi * argp->r;
+
+	return &result;
+
+----calculator---
+
+struct numbs{
+	int x;
+	int y;
+	int z;
+};
+
+program CALPRO{
+	version CALVER{
+		int cal(numbs)=1;
+}=1;
+}=0x2fffffff;
+
+...client
+clnt = clnt_create (host, CALPRO, CALVER, "udp");
+	if (clnt == NULL) {
+		clnt_pcreateerror (host);
+		exit (1);
+	}
+	
+	printf("enter 1st Num - ");
+	scanf("%d",&cal_1_arg.x);
+	
+	printf("enter 1st Num - ");
+	scanf("%d",&cal_1_arg.y);
+	
+	
+	printf("1 - Addition\n");
+	printf("2 - Subscription\n");
+	printf("3 - Multiplication\n");
+	printf("4 - Divition \n\n");
+	printf("enter operent - ");
+	scanf("%d",&cal_1_arg.z);
+
+result_1 = cal_1(&cal_1_arg, clnt);
+	if (result_1 == (int *) NULL) {
+		clnt_perror (clnt, "call failed");
+	}
+	
+	else{
+		printf("result is - %d ", *result_1);
+	}
+	
+
+.....server
+
+#include "cal.h"
+
+int *
+cal_1_svc(numbs *argp, struct svc_req *rqstp)
+{
+	static int  result;
+
+	if (argp->z == 1){
+		result = argp->x + argp->y;
+	}
+	else if(argp->z == 2){
+		result = argp->x - argp->y;
+	}
+	else if(argp->z == 3){
+		result = argp->x * argp->y;
+	}
+	else if(argp->z == 4){
+		result = argp->x / argp->y;
+	}
+
+	return &result;
+}
+
+
+
+javac sumIntf.java
+javac sumImpl.java
+rmic sumImpl
+javac sumserver.java
+javac sumclient.java
+rmiregistry &
+java sumserver
+new teminal -> java sumclient
+
+mpicc sum.c -o sum
+mpirun -np 2 ./sum
+
+
+
+
+
+
